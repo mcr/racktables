@@ -123,8 +123,15 @@ function init_config ()
 		echo '</table>';
 		return FALSE;
 	}
-	$pdo_dsn = 'mysql:host=' . $_REQUEST['mysql_host'] . ';dbname=' . $_REQUEST['mysql_db'];
-	try
+
+        $pdo_dsn='mysql:dbname=' . $_REQUEST['mysql_db'];
+        if(substr($_REQUEST['mysql_host'],0,1) == '/') {
+                $pdo_dsn = $pdo_dsn . ';unix_socket=' . $_REQUEST['mysql_host'];
+        } else if($_REQUEST['mysql_host'] != 'localhost') {
+                $pdo_dsn = $pdo_dsn . ';host=' . $_REQUEST['mysql_host'];
+        }
+
+        try
 	{
 		$dbxlink = new PDO ($pdo_dsn, $_REQUEST['mysql_username'], $_REQUEST['mysql_password']);
 	}
@@ -140,7 +147,7 @@ function init_config ()
 		echo "<td><input type=text name=mysql_username value='" . $_REQUEST['mysql_username'] . "'></td></tr>\n";
 		echo "<tr><td><label for=mysql_password>password:</label></td>";
 		echo "<td><input type=password name=mysql_password value='" . $_REQUEST['mysql_password'] . "'></td></tr>\n";
-		echo "<tr><td colspan=2>The above parameters did not work. Check and try again.</td></tr>\n";
+		echo "<tr><td colspan=2>The above parameters ($pdo_dsn) did not work. Check and try again. ($e)</td></tr>\n";
 		echo '</table>';
 		return FALSE;
 	}
