@@ -124,14 +124,17 @@ function init_config ()
 		return FALSE;
 	}
 
-        $pdo_dsn='mysql:dbname=' . $_REQUEST['mysql_db'];
-        if(substr($_REQUEST['mysql_host'],0,1) == '/') {
-                $pdo_dsn = $pdo_dsn . ';unix_socket=' . $_REQUEST['mysql_host'];
-        } else if($_REQUEST['mysql_host'] != 'localhost') {
-                $pdo_dsn = $pdo_dsn . ';host=' . $_REQUEST['mysql_host'];
-        }
+	$pdo_dsn='mysql:dbname=' . $_REQUEST['mysql_db'];
+	if(substr($_REQUEST['mysql_host'],0,1) == '/')
+	{
+		$pdo_dsn = $pdo_dsn . ';unix_socket=' . $_REQUEST['mysql_host'];
+	}
+	else if($_REQUEST['mysql_host'] != 'localhost')
+	{
+		$pdo_dsn = $pdo_dsn . ';host=' . $_REQUEST['mysql_host'];
+	}
 
-        try
+	try
 	{
 		$dbxlink = new PDO ($pdo_dsn, $_REQUEST['mysql_username'], $_REQUEST['mysql_password']);
 	}
