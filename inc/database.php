@@ -59,6 +59,22 @@ $SQLSchema = array
 		'keycolumn' => 'id',
 		'ordcolumns' => array ('IPv4Network.ip', 'IPv4Network.mask'),
 	),
+	'ipv6net' => array
+	(
+		'table' => 'IPv6Network',
+		'columns' => array
+		(
+			'id' => 'id',
+			'ipv6' => 'ipv6',
+			'prefixlen' => 'prefixlen',
+			'name' => 'name',
+			'comment' => 'comment',
+		#	'parent_id' => '(SELECT id FROM IPv6Network AS subt WHERE IPv6Network.ipv6 & (4294967295 >> (32 - subt.mask)) << (32 - subt.mask) = subt.ip and subt.mask < IPv4Network.mask ORDER BY subt.mask DESC limit 1)',
+		#	'vlanc' => '(SELECT COUNT(*) FROM VLANIPv4 WHERE ipv4net_id = id)',
+		),
+		'keycolumn' => 'id',
+		'ordcolumns' => array ('IPv6Network.ipv6', 'IPv6Network.prefixlen'),
+	),
 	'file' => array
 	(
 		'table' => 'File',

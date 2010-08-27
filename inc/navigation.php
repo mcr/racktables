@@ -14,8 +14,9 @@ $delayauth = array();
 
 $indexlayout = array
 (
-	array ('rackspace', 'depot', 'ipv4space', 'files'),
+	array ('rackspace', 'depot', 'ipv4space', 'ipv6space'),
 	array ('config', 'reports', 'ipv4slb', '8021q'),
+	array ('files'),
 );
 
 $page['index']['title'] = 'Main page';
@@ -183,6 +184,15 @@ $tabhandler['ipv4space']['default'] = 'renderIPv4Space';
 $tabhandler['ipv4space']['newrange'] = 'renderIPv4SpaceEditor';
 $ophandler['ipv4space']['newrange']['addIPv4Prefix'] = 'addIPv4Prefix';
 $ophandler['ipv4space']['newrange']['delIPv4Prefix'] = 'delIPv4Prefix';
+
+$page['ipv6space']['title'] = 'IPv6 space';
+$page['ipv6space']['parent'] = 'index';
+$tab['ipv6space']['default'] = 'Browse';
+$tab['ipv6space']['newrange'] = 'Manage';
+$tabhandler['ipv6space']['default'] = 'renderIpv6space';
+$tabhandler['ipv6space']['newrange'] = 'renderIpv6spaceEditor';
+$ophandler['ipv6space']['newrange']['addIPv6Prefix'] = 'addIPv6Prefix';
+$ophandler['ipv6space']['newrange']['delIPv6Prefix'] = 'delIPv6Prefix';
 
 $page['ipv4net']['parent'] = 'ipv4space';
 $page['ipv4net']['bypass'] = 'id';

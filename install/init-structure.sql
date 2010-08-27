@@ -490,5 +490,77 @@ CREATE TABLE `VLANValidID` (
   PRIMARY KEY  (`vlan_id`)
 ) ENGINE=InnoDB;
 
+;; IPv6 things
+
+CREATE TABLE `IPv6Address` (
+  `ipv6` char(40)  NOT NULL default '',
+  `name` char(255) NOT NULL default '',
+  `reserved` enum('yes','no') default NULL,
+  PRIMARY KEY  (`ipv6`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `IPv6Allocation` (
+  `object_id` int(10) unsigned NOT NULL default '0',
+  `ipv6` char(40)  NOT NULL default '',
+  `name` char(255) NOT NULL default '',
+  `type` enum('regular','shared','virtual','router') default NULL,
+  PRIMARY KEY  (`object_id`,`ipv6`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `IPv6LB` (
+  `object_id` int(10) unsigned default NULL,
+  `rspool_id` int(10) unsigned default NULL,
+  `vs_id` int(10) unsigned default NULL,
+  `vsconfig` text,
+  `rsconfig` text,
+  UNIQUE KEY `LB-VS` (`object_id`,`vs_id`),
+  KEY `IPv6LB-FK-rspool_id` (`rspool_id`),
+  KEY `IPv6LB-FK-vs_id` (`vs_id`),
+  CONSTRAINT `IPv6LB-FK-vs_id` FOREIGN KEY (`vs_id`) REFERENCES `IPv6VS` (`id`),
+  CONSTRAINT `IPv6LB-FK-object_id` FOREIGN KEY (`object_id`) REFERENCES `RackObject` (`id`),
+  CONSTRAINT `IPv6LB-FK-rspool_id` FOREIGN KEY (`rspool_id`) REFERENCES `IPv6RSPool` (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `IPv6Network` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `ipv6` char(40) NOT NULL default '0',
+  `prefixlen` int(4) unsigned NOT NULL default '64',
+  `name` char(255) default NULL,
+  `comment` text,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `base-len` (`ipv6`,`prefixlen`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `IPv6RS` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `inservice` enum('yes','no') NOT NULL default 'no',
+  `rsip` int(10) unsigned default NULL,
+  `rsport` smallint(5) unsigned default NULL,
+  `rspool_id` int(10) unsigned default NULL,
+  `rsconfig` text,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `pool-endpoint` (`rspool_id`,`rsip`,`rsport`),
+  CONSTRAINT `IPv6RS-FK` FOREIGN KEY (`rspool_id`) REFERENCES `IPv6RSPool` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE `IPv6RSPool` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` char(255) default NULL,
+  `vsconfig` text,
+  `rsconfig` text,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `IPv6VS` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `vip` char(40) default NULL,
+  `vport` smallint(5) unsigned default NULL,
+  `proto` enum('TCP','UDP') NOT NULL default 'TCP',
+  `name` char(255) default NULL,
+  `vsconfig` text,
+  `rsconfig` text,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB;
+
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 

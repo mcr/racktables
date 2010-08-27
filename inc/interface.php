@@ -83,6 +83,9 @@ $image['files']['height'] = 200;
 $image['ipv4space']['path'] = 'pix/addressspace.png';
 $image['ipv4space']['width'] = 218;
 $image['ipv4space']['height'] = 200;
+$image['ipv6space']['path'] = 'pix/ipv6rockettrainfy2.jpg';
+$image['ipv6space']['width'] = 218;
+$image['ipv6space']['height'] = 158;
 $image['ipv4slb']['path'] = 'pix/slb.png';
 $image['ipv4slb']['width'] = 218;
 $image['ipv4slb']['height'] = 200;
@@ -7811,5 +7814,7 @@ function renderDiscoveredNeighbors ($object_id)
 	}
 	echo '</table></form>';
 }
+
+require 'ipv6.php';
 
 ?>
