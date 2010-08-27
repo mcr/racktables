@@ -5796,48 +5796,10 @@ function printRoutersTD ($rlist, $as_cell = 'yes')
 // Same as for routers, but produce two TD cells to lay the content out better.
 function printIPv4NetInfoTDs ($netinfo, $tdclass = 'tdleft', $indent = 0, $symbol = 'spacer', $symbolurl = '')
 {
-	if ($symbol == 'spacer')
-	{
-		$indent++;
-		$symbol = '';
-	}
-	echo "<td class='${tdclass}' style='padding-left: " . ($indent * 16) . "px;'>";
-	if (strlen ($symbol))
-	{
-		if (strlen ($symbolurl))
-			echo "<a href='${symbolurl}'>";
-		printImageHREF ($symbol, $symbolurl);
-		if (strlen ($symbolurl))
-			echo '</a>';
-	}
-	if (isset ($netinfo['id']))
-		echo "<a href='index.php?page=ipv4net&id=${netinfo['id']}'>";
-	echo "${netinfo['ip']}/${netinfo['mask']}";
-	if (isset ($netinfo['id']))
-		echo '</a>';
-	echo "</td><td class='${tdclass}'>";
-	if (!isset ($netinfo['id']))
-	{
-		printImageHREF ('dragons', 'Here be dragons.');
-		if (getConfigVar ('IPV4_ENABLE_KNIGHT') == 'yes')
-		{
-			echo '<a href="' . makeHref (array
-			(
-				'page' => 'ipv4space',
-				'tab' => 'newrange',
-				'set-prefix' => $netinfo['ip'] . '/' . $netinfo['mask'],
-			)) . '">';
-			printImageHREF ('knight', 'create network here', TRUE);
-			echo '</a>';
-		}
-	}
-	else
-	{
-		echo niftyString ($netinfo['name']);
-		if (count ($netinfo['etags']))
-			echo '<br><small>' . serializeTags ($netinfo['etags'], "index.php?page=ipv4space&tab=default&") . '</small>';
-	}
-	echo "</td>";
+        return printIPNetInfoTDs ($netinfo, 'ip', 'mask', 'IPV4_ENABLE_KNIGHT',
+                                  'ipv4net', 'ipv4space',
+                                  $tdclass, $indent, $symbol, $symbolurl);
+
 }
 
 function renderCell ($cell)

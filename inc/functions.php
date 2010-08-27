@@ -1754,23 +1754,9 @@ function loadOwnIPv4Addresses (&$node)
 	$node['addrc'] = count ($node['addrlist']);
 }
 
-function prepareIPv4Tree ($netlist, $expanded_id = 0)
+function prepareIPv4Tree($netlist, $expanded_id = 0)
 {
-	// treeFromList() requires parent_id to be correct for an item to get onto the tree,
-	// so perform necessary pre-processing to make orphans belong to root. This trick
-	// was earlier performed by getIPv4NetworkList().
-	$netids = array_keys ($netlist);
-	foreach ($netids as $cid)
-		if (!in_array ($netlist[$cid]['parent_id'], $netids))
-			$netlist[$cid]['parent_id'] = NULL;
-	$tree = treeFromList ($netlist); // medium call
-	sortTree ($tree, 'IPv4NetworkCmp');
-	// complement the tree before markup to make the spare networks have "symbol" set
-	treeApplyFunc ($tree, 'iptree_fill');
-	iptree_markup_collapsion ($tree, getConfigVar ('TREE_THRESHOLD'), $expanded_id);
-	// count addresses after the markup to skip computation for hidden tree nodes
-	treeApplyFunc ($tree, 'countOwnIPv4Addresses', 'nodeIsCollapsed');
-	return $tree;
+        return prepareIPTree($netlist, 'IPv4NetworkCmp', 'countOwnIPv4Addresses');
 }
 
 // Check all items of the tree recursively, until the requested target id is
